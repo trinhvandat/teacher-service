@@ -1,0 +1,57 @@
+package com.example.restfullapi.controller;
+
+import com.example.restfullapi.model.Teacher;
+import com.example.restfullapi.service.iml.TeacherService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/teachers")
+public class TeacherController {
+
+
+    private final TeacherService teacherService;
+
+    @Autowired
+    public TeacherController(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
+
+    @PostMapping
+    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher) {
+        final Teacher createdTeacher = teacherService.createTeacher(teacher);
+        return new ResponseEntity<>(createdTeacher, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{teacher_id}")
+    public ResponseEntity<Teacher> updateTeacher(@PathVariable("teacher_id") int teacherId,
+                                                 @RequestBody Teacher teacher) {
+        final Teacher updatedTeacher = teacherService.updateTeacher(teacherId, teacher);
+        if (updatedTeacher == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
+        }
+    }
+
+    @DeleteMapping("/{teacher_id}")
+    public ResponseEntity<Void> deleteTeacher(@PathVariable("teacher_id") int teacherId) {
+        final Teacher deletedTeacher = teacherService.deleteTeacher(teacherId);
+        if (deletedTeacher == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Teacher>> listTeacher() {
+        final List<Teacher> teachers = teacherService.listTeacher();
+        return new ResponseEntity<>(teachers, HttpStatus.OK);
+    }
+}
+
