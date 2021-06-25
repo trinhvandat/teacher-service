@@ -11,12 +11,16 @@ import java.util.List;
 @Service
 public class TeacherServiceIml implements TeacherService {
 
+
+
+
     private final TeacherRepository teacherRepository;
 
     @Autowired
     public TeacherServiceIml(TeacherRepository teacherRepository) {
         this.teacherRepository = teacherRepository;
     }
+
 
     @Override
     public Teacher createTeacher(Teacher teacher) {
@@ -29,7 +33,6 @@ public class TeacherServiceIml implements TeacherService {
                 .map(teacher -> {
                     teacher.setName(teacherReq.getName());
                     teacher.setGmail(teacherReq.getGmail());
-                    teacher.setAge(teacherReq.getAge());
                     return teacher;
                 })
                 .map(teacherRepository::save)
