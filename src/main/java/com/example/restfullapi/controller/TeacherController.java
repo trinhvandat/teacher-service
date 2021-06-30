@@ -54,5 +54,6 @@ public class TeacherController {
         final List<Teacher> teachers = teacherService.listTeachers();
         return new ResponseEntity<>(teachers, HttpStatus.OK);
     }
+
 }
 
