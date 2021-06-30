@@ -78,7 +78,6 @@ public class TeacherServiceIml implements TeacherService {
         teacherDto.setAge(teacher.getAge());
 
         return teacherDto;
-
     }
 }
 
