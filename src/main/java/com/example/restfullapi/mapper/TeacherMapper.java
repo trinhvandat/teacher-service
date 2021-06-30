@@ -13,4 +13,5 @@ public interface TeacherMapper {
     TeacherDto convertToDto(Teacher teacher);
 
     Teacher convertToEntity(TeacherDto teacherDto);
+
 }
