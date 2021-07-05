@@ -1,5 +1,6 @@
 package com.example.restfullapi.service.iml.iml;
 
+import com.example.restfullapi.exception.TeacherNotFoundException;
 import com.example.restfullapi.mapper.TeacherMapper;
 import com.example.restfullapi.dto.TeacherDto;
 import com.example.restfullapi.model.Teacher;
@@ -41,18 +42,18 @@ public class TeacherServiceIml implements TeacherService {
                     return teacher;
                 })
                 .map(teacherRepository::save)
-                .orElse(null);
+                .orElseThrow(TeacherNotFoundException::new);
         return convertToDto(result);
     }
 
     @Override
-    public Teacher deleteTeacher(int teacherId) {
-        return teacherRepository.findById(teacherId)
+    public void deleteTeacher(int teacherId) {
+        teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacherRepository.delete(teacher);
                     return teacher;
                 })
-                .orElse(null);
+                .orElseThrow(TeacherNotFoundException::new);
     }
 
     @Override
@@ -78,6 +79,14 @@ public class TeacherServiceIml implements TeacherService {
         teacherDto.setAge(teacher.getAge());
 
         return teacherDto;
+
     }
+
+    @Override
+    public Teacher getTeacherById(int teacherId){
+        return teacherRepository.findById(teacherId)
+                .orElseThrow(TeacherNotFoundException::new);
+    }
+
 }
 
