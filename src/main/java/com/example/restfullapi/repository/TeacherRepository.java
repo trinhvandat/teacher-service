@@ -10,6 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface TeacherRepository  extends JpaRepository<Teacher, Integer>{
-    @Override
-    Optional<Teacher> findById(Integer id);
+
 }
