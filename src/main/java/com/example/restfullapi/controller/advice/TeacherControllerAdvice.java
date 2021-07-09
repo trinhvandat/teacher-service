@@ -18,4 +18,5 @@ public class TeacherControllerAdvice {
                 HttpStatus.valueOf(e.getTeacherServiceError().getErrorCode())
         );
     }
+
 }
