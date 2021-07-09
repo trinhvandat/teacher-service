@@ -54,5 +54,6 @@ public class TeacherController {
         final TeacherDto getTeacherById = teacherService.getTeacherById(teacherId);
         return new ResponseEntity<>(getTeacherById, HttpStatus.OK);
     }
+
 }
 
