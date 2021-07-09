@@ -15,7 +15,7 @@ public interface TeacherService {
 
     List<Teacher> listTeachers();
 
-    Teacher getTeacherById(int teacherId);
+    TeacherDto getTeacherById(int teacherId);
 
 }
 

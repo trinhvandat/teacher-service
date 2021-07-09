@@ -83,10 +83,10 @@ public class TeacherServiceIml implements TeacherService {
     }
 
     @Override
-    public Teacher getTeacherById(int teacherId){
-        return teacherRepository.findById(teacherId)
+    public TeacherDto getTeacherById(int teacherId){
+        Teacher result = teacherRepository.findById(teacherId)
                 .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(result);
     }
-
 }
 

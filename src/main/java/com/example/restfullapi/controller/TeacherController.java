@@ -50,10 +50,11 @@ public class TeacherController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Teacher> getTeacherById(@PathVariable("id") int teacherId){
-        final Teacher teacher = teacherService.getTeacherById(teacherId);
-        return new ResponseEntity<>(teacher, HttpStatus.OK);
+
+    @GetMapping("/{teacher_id}")
+    public ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacher_id") int teacherId) {
+        final TeacherDto getTeacherById = teacherService.getTeacherById(teacherId);
+        return new ResponseEntity<>(getTeacherById, HttpStatus.OK);
     }
 }
 
