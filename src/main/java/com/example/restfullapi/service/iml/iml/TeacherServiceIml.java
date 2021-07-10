@@ -88,6 +88,5 @@ public class TeacherServiceIml implements TeacherService {
                 .orElseThrow(TeacherNotFoundException::new);
         return convertToDto(getTeacher);
     }
-
 }
 
