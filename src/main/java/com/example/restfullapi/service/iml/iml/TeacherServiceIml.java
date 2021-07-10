@@ -1,5 +1,6 @@
 package com.example.restfullapi.service.iml.iml;
 
+import com.example.restfullapi.exception.TeacherNotFoundException;
 import com.example.restfullapi.mapper.TeacherMapper;
 import com.example.restfullapi.dto.TeacherDto;
 import com.example.restfullapi.model.Teacher;
@@ -18,7 +19,6 @@ public class TeacherServiceIml implements TeacherService {
 
     private  TeacherMapper teacherMapper;
 
-
     public TeacherServiceIml(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
         this.teacherMapper = teacherMapper;
@@ -33,7 +33,7 @@ public class TeacherServiceIml implements TeacherService {
     @Override
     public TeacherDto updateTeacher(int teacherId, TeacherDto teacherDto) {
         Teacher teacherReq = convertToEntity(teacherDto);
-        Teacher result = teacherRepository.findById(teacherId)
+        Teacher  teacherUpdated= teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacher.setName(teacherReq.getName());
                     teacher.setGmail(teacherReq.getGmail());
@@ -41,18 +41,18 @@ public class TeacherServiceIml implements TeacherService {
                     return teacher;
                 })
                 .map(teacherRepository::save)
-                .orElse(null);
-        return convertToDto(result);
+                .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(teacherUpdate);
     }
 
     @Override
-    public Teacher deleteTeacher(int teacherId) {
-        return teacherRepository.findById(teacherId)
+    public void deleteTeacher(int teacherId) {
+        teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacherRepository.delete(teacher);
                     return teacher;
                 })
-                .orElse(null);
+                .orElseThrow(TeacherNotFoundException::new);
     }
 
     @Override
@@ -70,6 +70,13 @@ public class TeacherServiceIml implements TeacherService {
         return teacher;
     }
 
+    @Override
+    public TeacherDto getTeacherById(int teacherId){
+        Teacher getTeacher = teacherRepository.findById(teacherId)
+                .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(getTeacher);
+    }
+
     private TeacherDto convertToDto(Teacher teacher){
         TeacherDto teacherDto = new TeacherDto();
         teacherDto.setId(teacher.getId());
@@ -78,6 +85,7 @@ public class TeacherServiceIml implements TeacherService {
         teacherDto.setAge(teacher.getAge());
 
         return teacherDto;
+
     }
 }
 

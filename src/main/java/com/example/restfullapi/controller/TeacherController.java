@@ -30,29 +30,29 @@ public class TeacherController {
 
     @PutMapping("/{teacher_id}")
     public ResponseEntity<TeacherDto> updateTeacher(@PathVariable("teacher_id") int teacherId,
-                                                 @RequestBody TeacherDto teacherDto) {
+                                                    @RequestBody TeacherDto teacherDto) {
         final TeacherDto updatedTeacher = teacherService.updateTeacher(teacherId, teacherDto);
-        if (updatedTeacher == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/{teacher_id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable("teacher_id") int teacherId) {
-        final Teacher deletedTeacher = teacherService.deleteTeacher(teacherId);
-        if (deletedTeacher == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
+        teacherService.deleteTeacher(teacherId);
+        return new ResponseEntity<>(HttpStatus.OK);
+
     }
 
     @GetMapping
     public ResponseEntity<List<Teacher>> listTeachers() {
         final List<Teacher> teachers = teacherService.listTeachers();
         return new ResponseEntity<>(teachers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{teacher_id}")
+    public ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacher_id") int teacherId) {
+        final TeacherDto getTeacher = teacherService.getTeacherById(teacherId);
+        return new ResponseEntity<>(getTeacherById, HttpStatus.OK);
     }
 
 }

@@ -5,16 +5,17 @@ import com.example.restfullapi.dto.TeacherDto;
 
 import java.util.List;
 
-    public interface TeacherService {
+public interface TeacherService {
 
-        TeacherDto createTeacher(TeacherDto teacherDto);
+    TeacherDto createTeacher(TeacherDto teacherDto);
 
-        TeacherDto updateTeacher(int teacherId, TeacherDto teacherDto);
+    TeacherDto updateTeacher(int teacherId, TeacherDto teacherDto);
 
-        Teacher deleteTeacher(int teacherId);
+    void deleteTeacher(int teacherId);
 
-        List<Teacher> listTeachers();
+    List<Teacher> listTeachers();
 
-    }
+    TeacherDto getTeacherById(int teacherId);
+}
 
 
