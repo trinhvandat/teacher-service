@@ -34,7 +34,7 @@ public class TeacherServiceIml implements TeacherService {
     @Override
     public TeacherDto updateTeacher(int teacherId, TeacherDto teacherDto) {
         Teacher teacherReq = convertToEntity(teacherDto);
-        Teacher result = teacherRepository.findById(teacherId)
+        Teacher  teacherUpdate= teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacher.setName(teacherReq.getName());
                     teacher.setGmail(teacherReq.getGmail());
@@ -43,7 +43,7 @@ public class TeacherServiceIml implements TeacherService {
                 })
                 .map(teacherRepository::save)
                 .orElseThrow(TeacherNotFoundException::new);
-        return convertToDto(result);
+        return convertToDto(teacherUpdate);
     }
 
     @Override
@@ -84,9 +84,9 @@ public class TeacherServiceIml implements TeacherService {
 
     @Override
     public TeacherDto getTeacherById(int teacherId){
-        Teacher result = teacherRepository.findById(teacherId)
+        Teacher getTeacher = teacherRepository.findById(teacherId)
                 .orElseThrow(TeacherNotFoundException::new);
-        return convertToDto(result);
+        return convertToDto(getTeacher);
     }
 
 }
