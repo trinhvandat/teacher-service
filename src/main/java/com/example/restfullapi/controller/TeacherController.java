@@ -51,7 +51,7 @@ public class TeacherController {
 
     @GetMapping("/{teacher_id}")
     public ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacher_id") int teacherId) {
-        final TeacherDto getTeacherById = teacherService.getTeacherById(teacherId);
+        final TeacherDto getTeacher = teacherService.getTeacherById(teacherId);
         return new ResponseEntity<>(getTeacherById, HttpStatus.OK);
     }
 
