@@ -61,6 +61,33 @@ public class TeacherServiceIml implements TeacherService {
         return teacherRepository.findAll();
     }
 
+
+
+    @Override
+    public TeacherDto getTeacherById(int teacherId){
+        Teacher result = teacherRepository.findById(teacherId)
+                .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(result);
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByName(String teacherName){
+        return teacherRepository.findByName(teacherName)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByAge(int teacherAge){
+        return teacherRepository.findByAge(teacherAge)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByGmail(String teacherGmail){
+        return teacherRepository.findByGmail(teacherGmail)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
     private Teacher convertToEntity(TeacherDto teacherDto){
         Teacher teacher =new Teacher();
         teacher.setId(teacherDto.getId());
@@ -79,14 +106,7 @@ public class TeacherServiceIml implements TeacherService {
         teacherDto.setAge(teacher.getAge());
 
         return teacherDto;
-
     }
 
-    @Override
-    public TeacherDto getTeacherById(int teacherId){
-        Teacher result = teacherRepository.findById(teacherId)
-                .orElseThrow(TeacherNotFoundException::new);
-        return convertToDto(result);
-    }
 }
 

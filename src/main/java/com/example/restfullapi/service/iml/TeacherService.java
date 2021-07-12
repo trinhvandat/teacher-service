@@ -17,6 +17,12 @@ public interface TeacherService {
 
     TeacherDto getTeacherById(int teacherId);
 
+    List<TeacherDto> getTeacherByName(String teacherName);
+
+    List<TeacherDto> getTeacherByAge(int  teacherAge);
+
+    List<TeacherDto> getTeacherByGmail(String teacherGmail);
+
 }
 
 
