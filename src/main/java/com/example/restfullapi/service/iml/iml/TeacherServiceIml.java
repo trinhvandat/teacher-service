@@ -1,5 +1,6 @@
 package com.example.restfullapi.service.iml.iml;
 
+import com.example.restfullapi.exception.TeacherNotFoundException;
 import com.example.restfullapi.mapper.TeacherMapper;
 import com.example.restfullapi.dto.TeacherDto;
 import com.example.restfullapi.model.Teacher;
@@ -41,23 +42,50 @@ public class TeacherServiceIml implements TeacherService {
                     return teacher;
                 })
                 .map(teacherRepository::save)
-                .orElse(null);
+                .orElseThrow(TeacherNotFoundException::new);
         return convertToDto(result);
     }
 
     @Override
-    public Teacher deleteTeacher(int teacherId) {
-        return teacherRepository.findById(teacherId)
+    public void deleteTeacher(int teacherId) {
+        teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacherRepository.delete(teacher);
                     return teacher;
                 })
-                .orElse(null);
+                .orElseThrow(TeacherNotFoundException::new);
     }
 
     @Override
     public List<Teacher> listTeachers() {
         return teacherRepository.findAll();
+    }
+
+
+
+    @Override
+    public TeacherDto getTeacherById(int teacherId){
+        Teacher result = teacherRepository.findById(teacherId)
+                .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(result);
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByName(String teacherName){
+        return teacherRepository.findByName(teacherName)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByAge(int teacherAge){
+        return teacherRepository.findByAge(teacherAge)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByGmail(String teacherGmail){
+        return teacherRepository.findByGmail(teacherGmail)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
     private Teacher convertToEntity(TeacherDto teacherDto){
@@ -79,5 +107,6 @@ public class TeacherServiceIml implements TeacherService {
 
         return teacherDto;
     }
+
 }
 

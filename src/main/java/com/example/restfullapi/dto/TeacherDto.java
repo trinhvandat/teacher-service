@@ -10,8 +10,6 @@ public class TeacherDto {
 
         private  int age;
 
-        private int status = 1;
-
         public int getId() {
             return id;
         }
@@ -43,13 +41,5 @@ public class TeacherDto {
         public void setGmail(String gmail) {
             this.gmail = gmail;
         }
-
-        public int getStatus() {
-        return status;
-    }
-
-        public void setStatus(int status) {
-        this.status = status;
-    }
 
 }
