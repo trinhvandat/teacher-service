@@ -66,27 +66,6 @@ public class TeacherServiceIml implements TeacherService {
         return teacherRepository.findAll();
     }
 
-
-
-    @Override
-    public TeacherDto getTeacherById(int teacherId){
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(TeacherNotFoundException::new);
-        return convertToDto(teacher);
-    }
-
-    @Override
-    public List<TeacherDto> getTeacherByName(String teacherName){
-        return teacherRepository.findByName(teacherName)
-                .stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TeacherDto> getTeacherByAge(int teacherAge){
-        return teacherRepository.findByAge(teacherAge)
-                .stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
     @Override
     public List<TeacherDto> getTeacherByGmail(String teacherGmail){
         return teacherRepository.findByGmail(teacherGmail)
