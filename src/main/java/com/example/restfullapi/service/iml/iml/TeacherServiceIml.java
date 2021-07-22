@@ -7,9 +7,12 @@ import com.example.restfullapi.model.Teacher;
 import com.example.restfullapi.repository.TeacherRepository;
 import com.example.restfullapi.service.iml.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeacherServiceIml implements TeacherService {
@@ -19,22 +22,23 @@ public class TeacherServiceIml implements TeacherService {
 
     private  TeacherMapper teacherMapper;
 
-
     public TeacherServiceIml(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
         this.teacherMapper = teacherMapper;
     }
 
     @Override
+    @Cacheable(value = "teacher")
     public TeacherDto createTeacher(TeacherDto teacherDto) {
         Teacher teacher = teacherMapper.convertToEntity(teacherDto);
         return teacherMapper.convertToDto(teacherRepository.save(teacher));
     }
 
     @Override
+    @Cacheable(value = "teacher")
     public TeacherDto updateTeacher(int teacherId, TeacherDto teacherDto) {
         Teacher teacherReq = convertToEntity(teacherDto);
-        Teacher result = teacherRepository.findById(teacherId)
+        Teacher teacherUpdate = teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacher.setName(teacherReq.getName());
                     teacher.setGmail(teacherReq.getGmail());
@@ -43,10 +47,11 @@ public class TeacherServiceIml implements TeacherService {
                 })
                 .map(teacherRepository::save)
                 .orElseThrow(TeacherNotFoundException::new);
-        return convertToDto(result);
+        return convertToDto(teacherUpdate);
     }
 
     @Override
+    @CacheEvict(value = "teacher")
     public void deleteTeacher(int teacherId) {
         teacherRepository.findById(teacherId)
                 .map(teacher -> {
@@ -61,13 +66,39 @@ public class TeacherServiceIml implements TeacherService {
         return teacherRepository.findAll();
     }
 
+
+
+    @Override
+    public TeacherDto getTeacherById(int teacherId){
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(teacher);
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByName(String teacherName){
+        return teacherRepository.findByName(teacherName)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByAge(int teacherAge){
+        return teacherRepository.findByAge(teacherAge)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<TeacherDto> getTeacherByGmail(String teacherGmail){
+        return teacherRepository.findByGmail(teacherGmail)
+                .stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
     private Teacher convertToEntity(TeacherDto teacherDto){
         Teacher teacher =new Teacher();
         teacher.setId(teacherDto.getId());
         teacher.setName(teacherDto.getName());
         teacher.setAge(teacherDto.getAge());
         teacher.setGmail(teacherDto.getGmail());
-
         return teacher;
     }
 
@@ -77,16 +108,8 @@ public class TeacherServiceIml implements TeacherService {
         teacherDto.setName(teacher.getName());
         teacherDto.setGmail(teacher.getGmail());
         teacherDto.setAge(teacher.getAge());
-
         return teacherDto;
 
-    }
-
-    @Override
-    public TeacherDto getTeacherById(int teacherId){
-        Teacher result = teacherRepository.findById(teacherId)
-                .orElseThrow(TeacherNotFoundException::new);
-        return convertToDto(result);
     }
 }
 
