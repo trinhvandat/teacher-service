@@ -65,13 +65,7 @@ public class TeacherServiceIml implements TeacherService {
     public List<Teacher> listTeachers() {
         return teacherRepository.findAll();
     }
-
-    @Override
-    public List<TeacherDto> getTeacherByGmail(String teacherGmail){
-        return teacherRepository.findByGmail(teacherGmail)
-                .stream().map(this::convertToDto).collect(Collectors.toList());
-    }
-
+    
     private Teacher convertToEntity(TeacherDto teacherDto){
         Teacher teacher =new Teacher();
         teacher.setId(teacherDto.getId());
