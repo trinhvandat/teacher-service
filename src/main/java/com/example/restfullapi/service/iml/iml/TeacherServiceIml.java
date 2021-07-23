@@ -1,14 +1,18 @@
 package com.example.restfullapi.service.iml.iml;
 
+import com.example.restfullapi.exception.TeacherNotFoundException;
 import com.example.restfullapi.mapper.TeacherMapper;
 import com.example.restfullapi.dto.TeacherDto;
 import com.example.restfullapi.model.Teacher;
 import com.example.restfullapi.repository.TeacherRepository;
 import com.example.restfullapi.service.iml.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TeacherServiceIml implements TeacherService {
@@ -18,22 +22,23 @@ public class TeacherServiceIml implements TeacherService {
 
     private  TeacherMapper teacherMapper;
 
-
     public TeacherServiceIml(TeacherRepository teacherRepository, TeacherMapper teacherMapper) {
         this.teacherRepository = teacherRepository;
         this.teacherMapper = teacherMapper;
     }
 
     @Override
+    @Cacheable(value = "teacher")
     public TeacherDto createTeacher(TeacherDto teacherDto) {
         Teacher teacher = teacherMapper.convertToEntity(teacherDto);
         return teacherMapper.convertToDto(teacherRepository.save(teacher));
     }
 
     @Override
+    @Cacheable(value = "teacher")
     public TeacherDto updateTeacher(int teacherId, TeacherDto teacherDto) {
         Teacher teacherReq = convertToEntity(teacherDto);
-        Teacher result = teacherRepository.findById(teacherId)
+        Teacher teacherUpdate = teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacher.setName(teacherReq.getName());
                     teacher.setGmail(teacherReq.getGmail());
@@ -41,32 +46,32 @@ public class TeacherServiceIml implements TeacherService {
                     return teacher;
                 })
                 .map(teacherRepository::save)
-                .orElse(null);
-        return convertToDto(result);
+                .orElseThrow(TeacherNotFoundException::new);
+        return convertToDto(teacherUpdate);
     }
 
     @Override
-    public Teacher deleteTeacher(int teacherId) {
-        return teacherRepository.findById(teacherId)
+    @CacheEvict(value = "teacher")
+    public void deleteTeacher(int teacherId) {
+        teacherRepository.findById(teacherId)
                 .map(teacher -> {
                     teacherRepository.delete(teacher);
                     return teacher;
                 })
-                .orElse(null);
+                .orElseThrow(TeacherNotFoundException::new);
     }
 
     @Override
     public List<Teacher> listTeachers() {
         return teacherRepository.findAll();
     }
-
+    
     private Teacher convertToEntity(TeacherDto teacherDto){
         Teacher teacher =new Teacher();
         teacher.setId(teacherDto.getId());
         teacher.setName(teacherDto.getName());
         teacher.setAge(teacherDto.getAge());
         teacher.setGmail(teacherDto.getGmail());
-
         return teacher;
     }
 
@@ -76,8 +81,8 @@ public class TeacherServiceIml implements TeacherService {
         teacherDto.setName(teacher.getName());
         teacherDto.setGmail(teacher.getGmail());
         teacherDto.setAge(teacher.getAge());
-
         return teacherDto;
+
     }
 }
 
