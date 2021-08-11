@@ -30,16 +30,16 @@ public class TeacherController {
 
     @PutMapping("/{teacher_id}")
     public ResponseEntity<TeacherDto> updateTeacher(@PathVariable("teacher_id") int teacherId,
-                                                    @RequestBody TeacherDto teacherDto) {
+                                                 @RequestBody TeacherDto teacherDto) {
         final TeacherDto updatedTeacher = teacherService.updateTeacher(teacherId, teacherDto);
-        return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
+            return new ResponseEntity<>(updatedTeacher, HttpStatus.OK);
 
     }
 
     @DeleteMapping("/{teacher_id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable("teacher_id") int teacherId) {
-        teacherService.deleteTeacher(teacherId);
-        return new ResponseEntity<>(HttpStatus.OK);
+       teacherService.deleteTeacher(teacherId);
+            return new ResponseEntity<>(HttpStatus.OK);
 
     }
 
@@ -50,11 +50,28 @@ public class TeacherController {
     }
 
 
-
     @GetMapping("/{teacher_id}")
     public ResponseEntity<TeacherDto> getTeacherById(@PathVariable("teacher_id") int teacherId) {
-        final TeacherDto getTeacherById = teacherService.getTeacherById(teacherId);
-        return new ResponseEntity<>(getTeacherById, HttpStatus.OK);
+        final TeacherDto getTeacher = teacherService.getTeacherById(teacherId);
+        return new ResponseEntity<>(getTeacher, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"name"})
+    public ResponseEntity<List<TeacherDto>> getTeacherByName(@RequestParam("name") String name){
+        final List<TeacherDto> teacherDtos = teacherService.getTeacherByName(name);
+        return new ResponseEntity<>(teacherDtos, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"age"})
+    public ResponseEntity<List<TeacherDto>> getTeacherByAge(@RequestParam("age") int age){
+        final List<TeacherDto> teacherDtos = teacherService.getTeacherByAge(age);
+        return new ResponseEntity<>(teacherDtos, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"gmail"})
+    public ResponseEntity<List<TeacherDto>> getTeacherByGmail(@RequestParam("gmail") String gmail){
+        List<TeacherDto> teacherDtos = teacherService.getTeacherByGmail(gmail);
+        return new ResponseEntity<>(teacherDtos, HttpStatus.OK);
     }
 }
 

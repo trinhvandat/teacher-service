@@ -1,12 +1,15 @@
 package com.example.restfullapi.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "teacher")
+@org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Teacher implements Serializable {
 
+    public static int getId;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -75,7 +78,6 @@ public class Teacher implements Serializable {
     public int hashCode() {
         return 31;
     }
-    
 }
 
 

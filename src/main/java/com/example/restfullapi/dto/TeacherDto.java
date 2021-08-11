@@ -1,5 +1,4 @@
 package com.example.restfullapi.dto;
-
 public class TeacherDto {
 
         private int id;
@@ -10,46 +9,36 @@ public class TeacherDto {
 
         private  int age;
 
-        private int status = 1;
-
         public int getId() {
-            return id;
+                return id;
         }
 
         public void setId(int id) {
-            this.id = id;
+                this.id = id;
         }
 
         public String getName() {
-            return name;
+                return name;
         }
 
         public void setName(String name) {
-            this.name = name;
+                this.name = name;
         }
 
         public int getAge() {
-        return age;
-    }
+                return age;
+        }
 
         public void setAge(int age) {
-        this.age = age;
-    }
+                this.age = age;
+        }
 
         public String getGmail() {
-            return gmail;
+                return gmail;
         }
 
         public void setGmail(String gmail) {
-            this.gmail = gmail;
+                this.gmail = gmail;
         }
-
-        public int getStatus() {
-        return status;
-    }
-
-        public void setStatus(int status) {
-        this.status = status;
-    }
 
 }
